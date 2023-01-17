@@ -47,12 +47,52 @@ public class DragonSlayer {
         }
     }
 
+    private void fight() {
+            int playerAtk = player.playerAtk();
+            System.out.println(player.getName() + " attacks the dragon, dealing " + playerAtk + " damage.");
+            dragon.takeDamage(playerAtk);
+            System.out.println("The dragon attacks back!");
+            if (0.1 * sword.getDodgeRate() >= Math.random()) {
+                System.out.println("However, you managed to dodge and lost 0 health.");
+            } else {
+                int dragonAtk = dragon.dragonAtk();
+                System.out.println("The dragon attacks you, dealing " + dragonAtk + " damage.");
+                player.takeDmg(dragonAtk);
+            }
+    }
+
     private void processChoice(String choice)
     {
+        Scanner scanner = new Scanner(System.in);
+        String decision = "";
         if (choice.equals("A") || choice.equals("a"))
         {
-            System.out.println(player.getName() + " attacks the dragon, dealing " + player.playerAtk() + " damage.");
-            dragon.takeDamage(player.playerAtk());
+            while (!dragon.isDead() && !player.isDead()) {
+                fight();
+                while (!(decision.equals("A") || decision.equals("a"))) {
+                    System.out.println("What do you want do now?");
+                    System.out.println("(A)ttack the dragon again.");
+                    System.out.println("(H)eal using a health pot.");
+                    System.out.println("(V)iew the player and weapon's stats.");
+                    System.out.println("(I)nspect the dragon's stats.");
+                    System.out.println("Or give up and (Q)uit the game?");
+                    System.out.println();
+                    System.out.print("What's your decision?");
+                    decision = scanner.nextLine();
+                    if (decision.equals("H") || decision.equals("h")) {
+                        player.useHPot();
+                    }
+                    if (decision.equals("V") || decision.equals("v")) {
+                        System.out.println("You have " + player.getHealth() + " HP.");
+                        System.out.println("You have " + player.getMoney() + " gold coins.";
+                        System.out.println("(H)eal using a health pot.");
+                        System.out.println("(V)iew the player and weapon's stats.");
+                        System.out.println("(I)nspect the dragon's stats.");
+                        System.out.println("Or give up and (Q)uit the game?");
+                    }
+                }
+            }
+       }
 
         }
         else if (choice.equals("M") || choice.equals("m"))

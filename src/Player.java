@@ -41,4 +41,12 @@ public class Player {
         healthPot = false;
     }
 
+    public boolean isDead() {
+        return (health <= 0);
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
 }
