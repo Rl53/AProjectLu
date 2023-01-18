@@ -13,7 +13,7 @@ public class Player {
     }
 
     public int playerAtk() {
-        return ((int) (Math.random() * 10) + 1) * sword.getPow();
+        return ((int) (0.3 * (Math.random() * 10) + 1)) * sword.getPow();
     }
 
     public void takeDmg(int dmg) {
@@ -24,7 +24,7 @@ public class Player {
         return name;
     }
 
-    public void getMoney(int money) {
+    public void setMoney(int money) {
         gold += money;
     }
 
@@ -48,5 +48,11 @@ public class Player {
     public int getHealth() {
         return health;
     }
+    public int getMoney() {
+        return gold;
+    }
 
+    public boolean hasHPot() {
+        return healthPot;
+    }
 }

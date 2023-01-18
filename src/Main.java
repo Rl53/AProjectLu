@@ -1,6 +1,6 @@
-import java.util.Scanner;
-
 public class Main {
-    DragonSlayer game = new DragonSlayer();
-    game.play();
+    public static void main(String[] args) {
+        DragonSlayer game = new DragonSlayer();
+        game.play();
+    }
 }

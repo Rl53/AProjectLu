@@ -8,4 +8,5 @@ public class Room {
         this.name = name;
         searched = false;
     }
+
 }
