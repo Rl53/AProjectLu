@@ -15,7 +15,7 @@ public class DragonSlayer {
         sword = new Sword();
         dragon = new Dragon();
         player = new Player();
-        room = new Room("the den", player);
+        room = new Room("den", player);
         roomsEntered = 1;
         canLeave = false;
     }
@@ -36,6 +36,7 @@ public class DragonSlayer {
     }
     private void showMenu()
     {
+        int numDragons = 1;
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         System.out.println("You are now in the " + room.getRoom());
@@ -47,6 +48,7 @@ public class DragonSlayer {
         while (!(choice.equals("X") || choice.equals("x")))
         {
             System.out.println();
+            System.out.println("Now what is your decision?");
             if (!dragon.isDead()) {
                 System.out.println("(A)ttack the dragon.");
             }
@@ -59,9 +61,29 @@ public class DragonSlayer {
             }
             System.out.println("Or give up and (Q)uit the game?");
             System.out.println();
-            System.out.print("What's your decision? ");
             choice = scanner.nextLine();
             processChoice(choice);
+            while (numDragons <= 3) {
+                if (Math.random() >= 0.6) {
+                    numDragons++;
+                    System.out.println();
+                    System.out.println("Another dragon spawns!");
+                    dragon = new Dragon();
+                    System.out.println("Now what is your decision?");
+                    System.out.println("(A)ttack the dragon.");
+                    System.out.println("(H)eal with a health pot.");
+                    System.out.println("(K)now your top score.");
+                    System.out.println("(S)tart a new game.");
+                    System.out.println("(L)ook around the room.");
+                    if (canLeave) {
+                        System.out.println("(M)ove to the next room.");
+                    }
+                    System.out.println("Or give up and (Q)uit the game?");
+                    System.out.println();
+                    choice = scanner.nextLine();
+                    processChoice(choice);
+                }
+            }
         }
     }
     private void inFight() {
@@ -158,17 +180,18 @@ public class DragonSlayer {
                 canLeave = false;
                 roomsEntered ++;
                 if (roomsEntered == 2) {
-                    room = new Room("the stronghold", player);
+                    room = new Room("stronghold", player);
                 }
                 else if (roomsEntered == 3) {
-                    room = new Room("the hatchery", player);
+                    room = new Room("hatchery", player);
                 }
                 else if (roomsEntered == 4) {
-                    room = new Room("the castle", player);
+                    room = new Room("castle", player);
                 }
                 else if (roomsEntered == 5) {
-                    room = new Room("the dragon's lair", player);
+                    room = new Room("dragon's lair", player);
                 }
+                System.out.println("You have entered " + room.getRoom());
             }
             else {
                 System.out.println("You have to defeat the dragon first.");

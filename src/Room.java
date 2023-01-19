@@ -19,7 +19,7 @@ public class Room {
         }
         else {
             if (Math.random() > 0.5) {
-                roomItem = "a health pot.";
+                roomItem = "a health pot";
             }
             System.out.println("You searched the room and found " + roomItem);
             if (roomItem.equals("a health pot")) {
