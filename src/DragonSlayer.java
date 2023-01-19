@@ -4,14 +4,20 @@ public class DragonSlayer {
     private static int topScore = 0;
     private Sword sword;
     private Player player;
+    private String name;
     private Dragon dragon;
     private Room room;
+    private int roomsEntered;
+
+    private boolean canLeave;
 
     public DragonSlayer(){
         sword = new Sword();
         dragon = new Dragon();
-        room = new Room("the den");
-        player = null;
+        player = new Player();
+        room = new Room("the den", player);
+        roomsEntered = 1;
+        canLeave = false;
     }
 
     public void play() {
@@ -25,13 +31,14 @@ public class DragonSlayer {
         System.out.println("Your objective is to clear all 5 rooms by defeating the dragons in the rooms.");
         System.out.print("What's your name? ");
         String name = scan.nextLine();
-        player = new Player(name);
+        player.setName(name);
         System.out.println("Good luck exploring, " + name + ", and...try not to die here...");
     }
     private void showMenu()
     {
         Scanner scanner = new Scanner(System.in);
         String choice = "";
+        System.out.println("You are now in the " + room.getRoom());
         if (!dragon.isDead()) {
             System.out.println();
             System.out.println("A dragon spawns!");
@@ -47,6 +54,9 @@ public class DragonSlayer {
             System.out.println("(K)now your top score.");
             System.out.println("(S)tart a new game.");
             System.out.println("(L)ook around the room.");
+            if (canLeave) {
+                System.out.println("(M)ove to the next room.");
+            }
             System.out.println("Or give up and (Q)uit the game?");
             System.out.println();
             System.out.print("What's your decision? ");
@@ -115,12 +125,16 @@ public class DragonSlayer {
             }
             if (player.isDead()) {
                 System.out.println("You lost all your health and died, better luck next time!");
+                int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
+                System.out.println("Your final score is " + newScore);
+                updateScore(newScore);
                 choice = "";
                 System.exit(0);
             }
             else if (dragon.isDead()) {
                 System.out.println("You defeated the dragon!");
                 dragonReward();
+                canLeave = true;
             }
        }
         if (choice.equals("H") || choice.equals("h")) {
@@ -130,6 +144,34 @@ public class DragonSlayer {
             }
             else {
                 System.out.println("You have no health pot.");
+            }
+        }
+        if (choice.equals("L") || choice.equals("l")) {
+            room.roomSearch();
+        }
+        if (choice.equals("K") || choice.equals("k")) {
+            System.out.println("Your high score is " + topScore);
+        }
+        if (choice.equals("M") || choice.equals("m")) {
+            if (canLeave) {
+                System.out.println("You move to the next room.");
+                canLeave = false;
+                roomsEntered ++;
+                if (roomsEntered == 2) {
+                    room = new Room("the stronghold", player);
+                }
+                else if (roomsEntered == 3) {
+                    room = new Room("the hatchery", player);
+                }
+                else if (roomsEntered == 4) {
+                    room = new Room("the castle", player);
+                }
+                else if (roomsEntered == 5) {
+                    room = new Room("the dragon's lair", player);
+                }
+            }
+            else {
+                System.out.println("You have to defeat the dragon first.");
             }
         }
 
@@ -156,5 +198,11 @@ public class DragonSlayer {
             else {
                 System.out.println("You found nothing and left empty-handed.");
             }
+    }
+
+    public void updateScore(int newScore) {
+        if (topScore < newScore) {
+            topScore = newScore;
+        }
     }
 }

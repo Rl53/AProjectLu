@@ -5,15 +5,18 @@ public class Player {
     private boolean healthPot;
     Sword sword = new Sword();
 
-    public Player(String name) {
+    public Player() {
         health = 100;
         gold = 0;
         healthPot = false;
-        this.name = name;
+        name = "";
     }
 
     public int playerAtk() {
         return ((int) (0.3 * (Math.random() * 10) + 1)) * sword.getPow();
+    }
+    public void setName(String newName) {
+        name = newName;
     }
 
     public void takeDmg(int dmg) {
