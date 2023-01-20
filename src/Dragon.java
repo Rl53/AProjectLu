@@ -8,7 +8,7 @@ public class Dragon {
     }
 
     public int dragonAtk() {
-        return ((int) (Math.random() * 10) + 1) + lvl * 6;
+        return ((int) (Math.random() * 6) + 1) + lvl * 3;
     }
 
     public void takeDamage(int dmg) {

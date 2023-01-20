@@ -45,46 +45,64 @@ public class DragonSlayer {
             System.out.println("A dragon spawns!");
         }
         System.out.println("Enter the corresponding letter to progress.");
-        while (!(choice.equals("X") || choice.equals("x")))
-        {
-            System.out.println();
-            System.out.println("Now what is your decision?");
-            if (!dragon.isDead()) {
-                System.out.println("(A)ttack the dragon.");
-            }
-            System.out.println("(H)eal with a health pot.");
-            System.out.println("(K)now your top score.");
-            System.out.println("(S)tart a new game.");
-            System.out.println("(L)ook around the room.");
-            if (canLeave) {
-                System.out.println("(M)ove to the next room.");
-            }
-            System.out.println("Or give up and (Q)uit the game?");
-            System.out.println();
-            choice = scanner.nextLine();
-            processChoice(choice);
-            while (numDragons <= 3) {
-                if (Math.random() >= 0.6) {
-                    numDragons++;
-                    System.out.println();
-                    System.out.println("Another dragon spawns!");
-                    dragon = new Dragon();
-                    System.out.println("Now what is your decision?");
+        while (!(choice.equals("X") || choice.equals("x"))) {
+            while (roomsEntered < 5) {
+                System.out.println();
+                System.out.println("Now what is your decision?");
+                if (!dragon.isDead()) {
                     System.out.println("(A)ttack the dragon.");
-                    System.out.println("(H)eal with a health pot.");
-                    System.out.println("(K)now your top score.");
-                    System.out.println("(S)tart a new game.");
-                    System.out.println("(L)ook around the room.");
-                    if (canLeave) {
-                        System.out.println("(M)ove to the next room.");
+                }
+                System.out.println("(H)eal with a health pot.");
+                System.out.println("(K)now your top score.");
+                System.out.println("(S)tart a new game.");
+                System.out.println("(L)ook around the room.");
+                if (canLeave) {
+                    System.out.println("(M)ove to the next room.");
+                }
+                System.out.println("Or give up and (Q)uit the game? ");
+                System.out.println();
+                choice = scanner.nextLine();
+                processChoice(choice);
+                while (numDragons <= 3) {
+                    if (Math.random() >= 0.6) {
+                        numDragons++;
+                        System.out.println();
+                        System.out.println("Another dragon spawns!");
+                        dragon = new Dragon();
+                        System.out.println("Now what is your decision?");
+                        System.out.println("(A)ttack the dragon.");
+                        System.out.println("(H)eal with a health pot.");
+                        System.out.println("(K)now your top score.");
+                        System.out.println("(S)tart a new game.");
+                        System.out.println("(L)ook around the room.");
+                        if (canLeave) {
+                            System.out.println("(M)ove to the next room.");
+                        }
+                        System.out.println("Or give up and (Q)uit the game? ");
+                        System.out.println();
+                        choice = scanner.nextLine();
+                        processChoice(choice);
+                    } else {
+                        numDragons = 3;
                     }
-                    System.out.println("Or give up and (Q)uit the game?");
-                    System.out.println();
-                    choice = scanner.nextLine();
-                    processChoice(choice);
+                }
+            }
+            if (roomsEntered == 5) {
+                System.out.println("Congratulations, you managed to clear all 5 rooms! ");
+                int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
+                System.out.println("You win! You achieved a highscore of " + newScore);
+                updateScore(newScore);
+                System.out.println("Enter (S) if you would like to play again.");
+                choice = scanner.nextLine();
+                if (choice.equals("S") || choice.equals("s")) {
+                    restart();
                 }
             }
         }
+    }
+
+    public void restart() {
+        player = something something
     }
     private void inFight() {
             int playerAtk = player.playerAtk();
@@ -141,7 +159,7 @@ public class DragonSlayer {
                 else if (choice.equals("I") || choice.equals("i")) {
                     System.out.println("This dragon is level " + dragon.getLvl() + " and has " + dragon.getHealth() + " health remaining.");
                 }
-                else {
+                else if (choice.equals("A") || choice.equals("a")){
                     inFight();
                 }
             }
@@ -174,6 +192,9 @@ public class DragonSlayer {
         if (choice.equals("K") || choice.equals("k")) {
             System.out.println("Your high score is " + topScore);
         }
+        if (choice.equals("S") || choice.equals("s")) {
+            restart();
+        }
         if (choice.equals("M") || choice.equals("m")) {
             if (canLeave) {
                 System.out.println("You move to the next room.");
@@ -191,7 +212,9 @@ public class DragonSlayer {
                 else if (roomsEntered == 5) {
                     room = new Room("dragon's lair", player);
                 }
-                System.out.println("You have entered " + room.getRoom());
+                System.out.println("You have entered the " + room.getRoom());
+                System.out.println("Another dragon spawns! ");
+                dragon = new Dragon();
             }
             else {
                 System.out.println("You have to defeat the dragon first.");
