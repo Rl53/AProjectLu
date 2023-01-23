@@ -6,7 +6,7 @@ public class Player {
     Sword sword = new Sword();
 
     public Player() {
-        health = 100;
+        health = 1000;
         gold = 0;
         healthPot = false;
         name = "";

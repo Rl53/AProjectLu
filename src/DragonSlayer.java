@@ -63,7 +63,7 @@ public class DragonSlayer {
                 System.out.println();
                 choice = scanner.nextLine();
                 processChoice(choice);
-                while (numDragons < 3) {
+                while (numDragons < 3 && roomsEntered != 6) {
                     if (Math.random() >= 0.6) {
                         canLeave = false;
                         System.out.println();
@@ -88,9 +88,6 @@ public class DragonSlayer {
                     }
                 }
                 numDragons = 1;
-                if (roomsEntered == 5) {
-                    roomsEntered++;
-                }
             }
                 System.out.println();
                 System.out.println("Congratulations, you managed to clear all 5 rooms! ");
@@ -249,6 +246,9 @@ public class DragonSlayer {
                 }
                 else if (roomsEntered == 5) {
                     room = new Room("dragon's lair", player);
+                }
+                else if (roomsEntered == 6) {
+                    room = new Room("trophy room", player);
                 }
                 System.out.println("You have entered the " + room.getRoom());
                 dragon = new Dragon();
