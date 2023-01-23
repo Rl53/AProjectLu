@@ -1,6 +1,7 @@
 import java.util.Scanner;
-
 public class DragonSlayer {
+
+    // instance variables
     private static int topScore = 0;
     private Sword sword;
     private Player player;
@@ -11,6 +12,7 @@ public class DragonSlayer {
 
     private boolean canLeave;
 
+    // constructor
     public DragonSlayer(){
         sword = new Sword();
         dragon = new Dragon();
@@ -20,9 +22,10 @@ public class DragonSlayer {
         canLeave = false;
     }
 
+    // method that starts the game
     public void play() {
         welcome();
-        showMenu();
+        defaultMenu();
     }
 
     private void welcome() {
@@ -34,7 +37,8 @@ public class DragonSlayer {
         player.setName(name);
         System.out.println("Good luck exploring, " + name + ", and...try not to die here...");
     }
-    private void showMenu()
+
+    private void defaultMenu()
     {
         int numDragons = 1;
         Scanner scanner = new Scanner(System.in);
@@ -105,40 +109,7 @@ public class DragonSlayer {
         }
     }
 
-    public void endGame() {
-        System.out.println("Farewell, until we meet again...");
-        System.exit(0);
-    }
-
-    public void restart() {
-        int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
-        updateScore(newScore);
-        System.out.println("Your highest score is " + topScore);
-        player = new Player();
-        dragon = new Dragon();
-        sword = new Sword();
-        room = new Room("den", player);
-        roomsEntered = 1;
-        canLeave = false;
-        System.out.println();
-        welcome();
-        showMenu();
-    }
-    private void inFight() {
-            int playerAtk = player.playerAtk();
-            System.out.println(player.getName() + " attacks the dragon, dealing " + playerAtk + " damage.");
-            dragon.takeDamage(playerAtk);
-            System.out.println("The dragon attacks back!");
-            if (0.01 * sword.getDodgeRate() >= Math.random()) {
-                System.out.println("However, you managed to dodge and lost 0 health.");
-            } else {
-                int dragonAtk = dragon.dragonAtk();
-                System.out.println("The dragon attacks you, dealing " + dragonAtk + " damage.");
-                player.takeDmg(dragonAtk);
-            }
-    }
-
-    private void processChoice(String choice)
+    public void processChoice(String choice)
     {
         Scanner scanner = new Scanner(System.in);
         if (choice.equals("A") || choice.equals("a"))
@@ -259,7 +230,7 @@ public class DragonSlayer {
         }
 
     }
-        public void dragonReward() {
+        private void dragonReward() {
             double random = Math.random();
             int gold = (int) (Math.random() * 76) + 25;
             if (random <= 0.25) {
@@ -283,9 +254,44 @@ public class DragonSlayer {
             }
     }
 
-    public void updateScore(int newScore) {
+    private void inFight() {
+        int playerAtk = player.playerAtk();
+        System.out.println(player.getName() + " attacks the dragon, dealing " + playerAtk + " damage.");
+        dragon.takeDamage(playerAtk);
+        System.out.println("The dragon attacks back!");
+        if (0.01 * sword.getDodgeRate() >= Math.random()) {
+            System.out.println("However, you managed to dodge and lost 0 health.");
+        } else {
+            int dragonAtk = dragon.dragonAtk();
+            System.out.println("The dragon attacks you, dealing " + dragonAtk + " damage.");
+            player.takeDmg(dragonAtk);
+        }
+    }
+
+    private void updateScore(int newScore) {
         if (topScore < newScore) {
             topScore = newScore;
         }
     }
+
+    public void restart() {
+        int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
+        updateScore(newScore);
+        System.out.println("Your highest score is " + topScore);
+        player = new Player();
+        dragon = new Dragon();
+        sword = new Sword();
+        room = new Room("den", player);
+        roomsEntered = 1;
+        canLeave = false;
+        System.out.println();
+        welcome();
+        defaultMenu();
+    }
+
+    private void endGame() {
+        System.out.println("Farewell, until we meet again...");
+        System.exit(0);
+    }
+
 }

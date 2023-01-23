@@ -1,17 +1,27 @@
 public class Room {
+
+    // instance variables
     private String name;
     private boolean searched;
     private Player player;
 
+    // constructor
     public Room(String name, Player player) {
         this.name = name;
         searched = false;
         this.player = player;
     }
 
+    // getter and setter methods
     public String getRoom() {
         return name;
     }
+
+    public void setSearched(boolean searched) {
+        this.searched = searched;
+    }
+
+    // gets item from unsearched room
     public void roomSearch() {
         String roomItem = "nothing";
         if (searched) {
@@ -31,9 +41,5 @@ public class Room {
             }
         }
         searched = true;
-    }
-
-    public void setSearched(boolean searched) {
-        this.searched = searched;
     }
 }
