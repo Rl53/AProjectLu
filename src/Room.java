@@ -32,4 +32,8 @@ public class Room {
         }
         searched = true;
     }
+
+    public void setSearched(boolean searched) {
+        this.searched = searched;
+    }
 }

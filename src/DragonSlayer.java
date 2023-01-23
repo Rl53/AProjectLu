@@ -45,8 +45,8 @@ public class DragonSlayer {
             System.out.println("A dragon spawns!");
         }
         System.out.println("Enter the corresponding letter to progress.");
-        while (!(choice.equals("X") || choice.equals("x"))) {
-            while (roomsEntered < 5) {
+        while (!(choice.equals("Q") || choice.equals("q"))) {
+            while (roomsEntered <= 5) {
                 System.out.println();
                 System.out.println("Now what is your decision?");
                 if (!dragon.isDead()) {
@@ -63,9 +63,9 @@ public class DragonSlayer {
                 System.out.println();
                 choice = scanner.nextLine();
                 processChoice(choice);
-                while (numDragons <= 3) {
+                while (numDragons < 3) {
                     if (Math.random() >= 0.6) {
-                        numDragons++;
+                        canLeave = false;
                         System.out.println();
                         System.out.println("Another dragon spawns!");
                         dragon = new Dragon();
@@ -80,14 +80,19 @@ public class DragonSlayer {
                         }
                         System.out.println("Or give up and (Q)uit the game? ");
                         System.out.println();
+                        numDragons++;
                         choice = scanner.nextLine();
                         processChoice(choice);
                     } else {
                         numDragons = 3;
                     }
                 }
+                numDragons = 1;
+                if (roomsEntered == 5) {
+                    roomsEntered++;
+                }
             }
-            if (roomsEntered == 5) {
+                System.out.println();
                 System.out.println("Congratulations, you managed to clear all 5 rooms! ");
                 int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
                 System.out.println("You win! You achieved a highscore of " + newScore);
@@ -97,12 +102,30 @@ public class DragonSlayer {
                 if (choice.equals("S") || choice.equals("s")) {
                     restart();
                 }
-            }
+                else {
+                    endGame();
+                }
         }
     }
 
+    public void endGame() {
+        System.out.println("Farewell, until we meet again...");
+        System.exit(0);
+    }
+
     public void restart() {
-        player = something something
+        int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
+        updateScore(newScore);
+        System.out.println("Your highest score is " + topScore);
+        player = new Player();
+        dragon = new Dragon();
+        sword = new Sword();
+        room = new Room("den", player);
+        roomsEntered = 1;
+        canLeave = false;
+        System.out.println();
+        welcome();
+        showMenu();
     }
     private void inFight() {
             int playerAtk = player.playerAtk();
@@ -159,6 +182,9 @@ public class DragonSlayer {
                 else if (choice.equals("I") || choice.equals("i")) {
                     System.out.println("This dragon is level " + dragon.getLvl() + " and has " + dragon.getHealth() + " health remaining.");
                 }
+                else if (choice.equals("q") || choice.equals("Q")) {
+                    endGame();
+                }
                 else if (choice.equals("A") || choice.equals("a")){
                     inFight();
                 }
@@ -168,8 +194,16 @@ public class DragonSlayer {
                 int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
                 System.out.println("Your final score is " + newScore);
                 updateScore(newScore);
-                choice = "";
-                System.exit(0);
+                System.out.println("Do you want to play again? (Y)es or (N)o");
+                choice = scanner.nextLine();
+                if (choice.equals("y") || choice.equals("Y")) {
+                    choice = "";
+                    restart();
+                }
+                else {
+                    System.out.println("See you next time!");
+                    System.exit(0);
+                }
             }
             else if (dragon.isDead()) {
                 System.out.println("You defeated the dragon!");
@@ -195,11 +229,15 @@ public class DragonSlayer {
         if (choice.equals("S") || choice.equals("s")) {
             restart();
         }
+        if (choice.equals("q") || choice.equals("Q")) {
+            endGame();
+        }
         if (choice.equals("M") || choice.equals("m")) {
             if (canLeave) {
                 System.out.println("You move to the next room.");
                 canLeave = false;
                 roomsEntered ++;
+                room.setSearched(false);
                 if (roomsEntered == 2) {
                     room = new Room("stronghold", player);
                 }
@@ -213,7 +251,6 @@ public class DragonSlayer {
                     room = new Room("dragon's lair", player);
                 }
                 System.out.println("You have entered the " + room.getRoom());
-                System.out.println("Another dragon spawns! ");
                 dragon = new Dragon();
             }
             else {
