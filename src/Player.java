@@ -9,7 +9,7 @@ public class Player {
 
     // constructor
     public Player() {
-        health = 1000;
+        health = 100;
         gold = 0;
         healthPot = false;
         name = "";

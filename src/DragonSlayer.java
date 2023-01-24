@@ -5,10 +5,10 @@ public class DragonSlayer {
     private static int topScore = 0;
     private Sword sword;
     private Player player;
-    private String name;
     private Dragon dragon;
     private Room room;
     private int roomsEntered;
+    private int numDragons;
 
     private boolean canLeave;
 
@@ -20,6 +20,7 @@ public class DragonSlayer {
         room = new Room("den", player);
         roomsEntered = 1;
         canLeave = false;
+        numDragons = 1;
     }
 
     // method that starts the game
@@ -28,6 +29,7 @@ public class DragonSlayer {
         defaultMenu();
     }
 
+    // introduces the player
     private void welcome() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to Dragon Slayer!");
@@ -38,9 +40,10 @@ public class DragonSlayer {
         System.out.println("Good luck exploring, " + name + ", and...try not to die here...");
     }
 
+    /* Main menu that provides general information on current available actions,
+       generates a random amount of dragon, and determines end conditions */
     private void defaultMenu()
     {
-        int numDragons = 1;
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         System.out.println("You are now in the " + room.getRoom());
@@ -50,25 +53,30 @@ public class DragonSlayer {
         }
         System.out.println("Enter the corresponding letter to progress.");
         while (!(choice.equals("Q") || choice.equals("q"))) {
-            while (roomsEntered <= 5) {
-                System.out.println();
-                System.out.println("Now what is your decision?");
-                if (!dragon.isDead()) {
-                    System.out.println("(A)ttack the dragon.");
+            while (roomsEntered < 5) {
+                while (!(choice.equals("A") || choice.equals("a"))) {
+                    System.out.println();
+                    System.out.println("Now what is your decision?");
+                    if (!dragon.isDead()) {
+                        System.out.println("(A)ttack the dragon.");
+                    }
+                    System.out.println("(H)eal with a health pot.");
+                    System.out.println("(K)now your top score.");
+                    System.out.println("(S)tart a new game.");
+                    System.out.println("(L)ook around the room.");
+                    if (canLeave) {
+                        System.out.println("(M)ove to the next room.");
+                    }
+                    System.out.println("Or give up and (Q)uit the game? ");
+                    System.out.println();
+                    choice = scanner.nextLine();
+                    processChoice(choice);
                 }
-                System.out.println("(H)eal with a health pot.");
-                System.out.println("(K)now your top score.");
-                System.out.println("(S)tart a new game.");
-                System.out.println("(L)ook around the room.");
-                if (canLeave) {
-                    System.out.println("(M)ove to the next room.");
-                }
-                System.out.println("Or give up and (Q)uit the game? ");
-                System.out.println();
-                choice = scanner.nextLine();
-                processChoice(choice);
+                numDragons = 1;
+                // creates 1-3 dragons per room
                 while (numDragons < 3 && roomsEntered != 6) {
                     if (Math.random() >= 0.6) {
+                        numDragons++;
                         canLeave = false;
                         System.out.println();
                         System.out.println("Another dragon spawns!");
@@ -84,15 +92,15 @@ public class DragonSlayer {
                         }
                         System.out.println("Or give up and (Q)uit the game? ");
                         System.out.println();
-                        numDragons++;
                         choice = scanner.nextLine();
                         processChoice(choice);
                     } else {
                         numDragons = 3;
                     }
+                    choice = "";
                 }
-                numDragons = 1;
             }
+                // end conditions
                 System.out.println();
                 System.out.println("Congratulations, you managed to clear all 5 rooms! ");
                 int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
@@ -109,6 +117,7 @@ public class DragonSlayer {
         }
     }
 
+    // generates current actions during a fight
     public void processChoice(String choice)
     {
         Scanner scanner = new Scanner(System.in);
@@ -157,6 +166,8 @@ public class DragonSlayer {
                     inFight();
                 }
             }
+
+            // determines if end conditions are met
             if (player.isDead()) {
                 System.out.println("You lost all your health and died, better luck next time!");
                 int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
@@ -200,12 +211,15 @@ public class DragonSlayer {
         if (choice.equals("q") || choice.equals("Q")) {
             endGame();
         }
+
+        // sets the name of the rooms
         if (choice.equals("M") || choice.equals("m")) {
             if (canLeave) {
                 System.out.println("You move to the next room.");
                 canLeave = false;
                 roomsEntered ++;
                 room.setSearched(false);
+                numDragons++;
                 if (roomsEntered == 2) {
                     room = new Room("stronghold", player);
                 }
@@ -218,9 +232,6 @@ public class DragonSlayer {
                 else if (roomsEntered == 5) {
                     room = new Room("dragon's lair", player);
                 }
-                else if (roomsEntered == 6) {
-                    room = new Room("trophy room", player);
-                }
                 System.out.println("You have entered the " + room.getRoom());
                 dragon = new Dragon();
             }
@@ -230,6 +241,8 @@ public class DragonSlayer {
         }
 
     }
+
+        // calculates the four possible drops of defeating a dragon
         private void dragonReward() {
             double random = Math.random();
             int gold = (int) (Math.random() * 76) + 25;
@@ -254,6 +267,7 @@ public class DragonSlayer {
             }
     }
 
+    // calculates damage taken by the dragon and the player
     private void inFight() {
         int playerAtk = player.playerAtk();
         System.out.println(player.getName() + " attacks the dragon, dealing " + playerAtk + " damage.");
@@ -274,6 +288,7 @@ public class DragonSlayer {
         }
     }
 
+    // resets the values and restarts the game
     public void restart() {
         int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
         updateScore(newScore);
