@@ -102,9 +102,9 @@ public class DragonSlayer {
             }
                 // end conditions
                 System.out.println();
-                System.out.println("Congratulations, you managed to clear all 5 rooms! ");
-                int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
-                System.out.println("You win! You achieved a highscore of " + newScore);
+                System.out.println("Congratulations, " + player.getName() + ", you managed to clear all 5 rooms! ");
+                int newScore = player.getMoney() * 15 + sword.getPow() * 10 + sword.getDodgeRate() * 7 + player.getHealth() * 4;
+                System.out.println("You win! You achieved a final score of " + newScore);
                 updateScore(newScore);
                 System.out.println("Enter (S) if you would like to play again.");
                 choice = scanner.nextLine();
@@ -138,7 +138,7 @@ public class DragonSlayer {
                 if (choice.equals("H") || choice.equals("h")) {
                     if (player.hasHPot()) {
                         player.useHPot();
-                        System.out.println("You used your health potion and healed half of your health.");
+                        System.out.println("You used your health potion and healed half of your remaining health.");
                     } else {
                         System.out.println("You have no health pot.");
                     }
@@ -170,7 +170,7 @@ public class DragonSlayer {
             // determines if end conditions are met
             if (player.isDead()) {
                 System.out.println("You lost all your health and died, better luck next time!");
-                int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
+                int newScore = player.getMoney() * 10 + sword.getPow() * 7 + sword.getDodgeRate() * 5;
                 System.out.println("Your final score is " + newScore);
                 updateScore(newScore);
                 System.out.println("Do you want to play again? (Y)es or (N)o");
@@ -186,14 +186,35 @@ public class DragonSlayer {
             }
             else if (dragon.isDead()) {
                 System.out.println("You defeated the dragon!");
-                dragonReward();
+                String reward = dragon.getReward();
+                // calculates the four possible drops of defeating a dragon
+                    int gold = (int) (Math.random() * 76) + 25;
+                    if (reward.equals("gold")) {
+                        System.out.println("The dragon drops " + gold + " gold coins, which you collect.");
+                        player.setMoney(gold);
+                        System.out.println("You now have " + player.getMoney() + " gold coins.");
+                    }
+                    else if (reward.equals("upgrade")) {
+                        System.out.println("The dragon drops an upgrade for the sword.");
+                        System.out.println("Your sword gains 10 attack and 15 dodge rating.");
+                        sword.moreAtk(10);
+                        sword.higherDodge(15);
+                    }
+                    else if (reward.equals("heal")) {
+                        System.out.println("You feel more confident, and healed yourself.");
+                        player.heal();
+                        System.out.println("You have " + player.getHealth() + " health.");
+                    }
+                    else {
+                        System.out.println("You found nothing and left empty-handed.");
+                    }
                 canLeave = true;
             }
        }
         if (choice.equals("H") || choice.equals("h")) {
             if (player.hasHPot()) {
                 player.useHPot();
-                System.out.println("You used your health potion and healed half of your health.");
+                System.out.println("You used your health potion and healed half of your remaining health.");
             }
             else {
                 System.out.println("You have no health pot.");
@@ -242,31 +263,6 @@ public class DragonSlayer {
 
     }
 
-        // calculates the four possible drops of defeating a dragon
-        private void dragonReward() {
-            double random = Math.random();
-            int gold = (int) (Math.random() * 76) + 25;
-            if (random <= 0.25) {
-                System.out.println("The dragon drops " + gold + " gold coins, which you collect.");
-                player.setMoney(gold);
-                System.out.println("You now have " + player.getMoney() + " gold coins.");
-            }
-            else if (random <= 0.5) {
-                System.out.println("The dragon drops an upgrade for the sword.");
-                System.out.println("Your sword gains 10 attack and 15 dodge rating.");
-                sword.moreAtk(10);
-                sword.higherDodge(15);
-            }
-            else if (random <= 0.75) {
-                System.out.println("You feel more confident, and healed yourself.");
-                player.heal();
-                System.out.println("You have " + player.getHealth() + " health.");
-            }
-            else {
-                System.out.println("You found nothing and left empty-handed.");
-            }
-    }
-
     // calculates damage taken by the dragon and the player
     private void inFight() {
         int playerAtk = player.playerAtk();
@@ -290,8 +286,6 @@ public class DragonSlayer {
 
     // resets the values and restarts the game
     public void restart() {
-        int newScore = player.getMoney() * 10 + sword.getPow() * 5 + sword.getDodgeRate() * 3;
-        updateScore(newScore);
         System.out.println("Your highest score is " + topScore);
         player = new Player();
         dragon = new Dragon();

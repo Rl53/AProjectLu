@@ -5,7 +5,7 @@ public class Player {
     private int health;
     private int gold;
     private boolean healthPot;
-    Sword sword = new Sword();
+    private Sword sword;
 
     // constructor
     public Player() {
@@ -13,6 +13,7 @@ public class Player {
         gold = 0;
         healthPot = false;
         name = "";
+        sword = new Sword();
     }
 
     // getter and setter methods

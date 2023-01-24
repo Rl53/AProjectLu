@@ -30,4 +30,20 @@ public class Dragon {
     public void takeDamage(int dmg) {
         health -= dmg;
     }
+
+    public String getReward() {
+        int random = (int) (Math.random() * 4) + 1;
+        if (random == 1) {
+            return "heal";
+        }
+        else if (random == 2) {
+            return "upgrade";
+        }
+        else if (random == 3) {
+            return "gold";
+        }
+        else {
+            return "nothing";
+        }
+    }
 }
